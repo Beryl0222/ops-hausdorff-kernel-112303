@@ -31,5 +31,15 @@ def main():
                      ensure_ascii=False))
 
 
+def __getattr__(name):
+    """Lazily expose kernel symbols for callers that start from this module."""
+    import hausdorff_kernel
+
+    try:
+        return getattr(hausdorff_kernel, name)
+    except AttributeError as exc:
+        raise AttributeError(f"module {__name__!r} has no attribute {name!r}") from exc
+
+
 if __name__ == "__main__":
     main()
